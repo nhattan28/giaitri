@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trang chủ | Góc Hay Ho</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #fceabb, #f8b500);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    .container {
+      background: white;
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      width: 90%;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 1.2rem;
+      background: #f8b500;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #f39c12;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .btn {
+        font-size: 1rem;
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Góc Hay Ho</h1>
+    <button class="btn" onclick="window.location.href='quick-learns.html'">🧠 Kiến thức nhanh</button>
+    <button class="btn" onclick="window.location.href='short-story.html'">📖 Truyện mỗi ngày</button>
+  </div>
+</body>
+</html>
