@@ -91,13 +91,26 @@
         const response = await fetch('https://script.google.com/macros/s/AKfycbzQ1loBs5fd9I4Pwo1IN-2u26nGSBSefkJFibPxzKVBktoTH9pM2MeCcK0F-0Lfebe_/exec'); // 👉 thay URL của bạn
         const data = await response.json();
 
-        // Cà phê
-        const cp = data.caphe;
-        let cpHTML = `Ngày: ${cp.ngay}<br>💰 Giá: ${cp.gia.toLocaleString('vi-VN')} VNĐ/kg<br>`;
-        if (cp.thaydoi > 0) cpHTML += ` Tăng: ${cp.thaydoi.toLocaleString('vi-VN')} VNĐ/kg`;
-        else if (cp.thaydoi < 0) cpHTML += ` Giảm: ${Math.abs(cp.thaydoi).toLocaleString('vi-VN')} VNĐ/kg`;
-        else cpHTML += `Không đổi`;
-        document.getElementById('giaCaPhe').innerHTML = cpHTML;
+      // Cà phê (hiển thị dạng bảng)
+      const cp = data.caphe;
+      let cpTable = `<b>Giá cà phê hôm nay ngày ${cp.ngay}</b><br>`;
+      cpTable += `
+        <table>
+          <tr>
+            <th>Khu vực</th>
+            <th>Giá</th>
+            <th>Thay đổi</th>
+          </tr>
+          <tr>
+            <td>Đắk Nông</td>
+            <td>${cp.gia.toLocaleString('vi-VN')}</td>
+            <td>${cp.thaydoi > 0 ? `➕ ${cp.thaydoi.toLocaleString('vi-VN')}` :
+                 cp.thaydoi < 0 ? `➖ ${Math.abs(cp.thaydoi).toLocaleString('vi-VN')}` : `Không đổi`}</td>
+          </tr>
+        </table>
+      `;
+      document.getElementById('giaCaPhe').innerHTML = cpTable;
+
 
         // Tiêu
         const tieu = data.tieu;
