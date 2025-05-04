@@ -73,10 +73,10 @@
   </style>
 </head>
 <body>
-  <h1>🌱 Giá Cà Phê & Giá Tiêu Hôm Nay 🌱</h1>
+  <h2>🌱 Giá Hôm Nay 🌱</h2>
 
   <div class="section" id="caphe">
-    <h2>☕ Cà Phê Đắk Nông</h2>
+    <h2>☕ Cà Phê  <h2>
     <div id="giaCaPhe">Đang tải giá cà phê...</div>
   </div>
 
@@ -93,7 +93,7 @@
 
       // Cà phê (hiển thị dạng bảng)
       const cp = data.caphe;
-      let cpTable = `<b>Giá cà phê hôm nay ngày ${cp.ngay}</b><br>`;
+      let cpTable = `Giá cà phê hôm nay ngày ${cp.ngay}<br>`;
       cpTable += `
         <table>
           <tr>
@@ -104,8 +104,8 @@
           <tr>
             <td>Đắk Nông</td>
             <td>${cp.gia.toLocaleString('vi-VN')}</td>
-            <td>${cp.thaydoi > 0 ? `➕ ${cp.thaydoi.toLocaleString('vi-VN')}` :
-                 cp.thaydoi < 0 ? `➖ ${Math.abs(cp.thaydoi).toLocaleString('vi-VN')}` : `Không đổi`}</td>
+            <td>${cp.thaydoi > 0 ? `${cp.thaydoi.toLocaleString('vi-VN')}` :
+                 cp.thaydoi < 0 ? `${Math.abs(cp.thaydoi).toLocaleString('vi-VN')}` : `Không đổi`}</td>
           </tr>
         </table>
       `;
@@ -114,7 +114,7 @@
 
         // Tiêu
         const tieu = data.tieu;
-        let tieuHTML = `<b>${tieu.tieuDe}</b><br><table><tr><th>Khu Vực</th><th>Giá Mua (VNĐ/kg)</th><th>Thay Đổi</th></tr>`;
+        let tieuHTML = `<b>${tieu.tieuDe}</b><br><table><tr><th>Khu Vực</th><th>Giá Mua</th><th>Thay Đổi</th></tr>`;
         tieu.data.forEach(item => {
           let change = item.thayDoi > 0 ? ` ${item.thayDoi.toLocaleString('vi-VN')}` : 
                       item.thayDoi < 0 ? ` ${Math.abs(item.thayDoi).toLocaleString('vi-VN')}` : `Không đổi`;
