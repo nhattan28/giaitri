@@ -1,130 +1,112 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Giá Cà Phê & Giá Tiêu</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tin tức tổng hợp</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
       padding: 20px;
-      background: #fff7e6;
-      color: #4b2e2e;
+    }
+
+    h1 {
       text-align: center;
+      color: #333;
+      margin-bottom: 30px;
     }
 
-    h1, h2 {
-      color: #6b4226;
-      margin: 0.5rem 0;
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
-    .section {
-      margin-bottom: 40px;
+    .article-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.2s ease;
     }
 
-    table {
+    .article-card:hover {
+      transform: scale(1.02);
+    }
+
+    .article-image img {
       width: 100%;
-      max-width: 800px;
-      margin: 20px auto;
-      border-collapse: collapse;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .article-content {
+      padding: 15px;
+    }
+
+    .article-title {
       font-size: 18px;
-    }
-
-    th, td {
-      border: 1px solid #ccc;
-      padding: 8px;
-      text-align: center;
-    }
-
-    th {
-      background-color: #f2e6d9;
       font-weight: bold;
+      color: #007BFF;
+      text-decoration: none;
     }
 
-    .updated {
+    .article-title:hover {
+      text-decoration: underline;
+    }
+
+    .article-summary {
       font-size: 14px;
-      color: #888;
-      margin-top: 5px;
+      color: #444;
+      margin-top: 8px;
     }
 
-    @media screen and (max-width: 600px) {
-      h1 {
-        font-size: 2rem;
-      }
-
-      h2 {
-        font-size: 1.5rem;
-      }
-
-      table {
-        width: 90%;
-        font-size: 16px;
-      }
-
-      th, td {
-        padding: 12px;
-      }
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #888;
     }
   </style>
 </head>
 <body>
-    <h2>🌱 GIÁ HÔM NAY 🌱</h2>
-
-  <div class="section" id="caphe">
-    <h2>☕ Cà Phê</h2>
-    <div id="giaCaPhe">Đang tải giá cà phê...</div>
+  <h1>Tin tức tổng hợp</h1>
+  <div class="container">
+    <!-- Các bài viết sẽ được tự động chèn vào đây -->
   </div>
 
-  <div class="section" id="tieu">
-    <h2>🌰 Tiêu</h2>
-    <div id="giaTieu">Đang tải giá tiêu...</div>
-  </div>
+  <div class="footer">Cập nhật tự động từ VnExpress, Tuổi Trẻ, 24h</div>
 
   <script>
-    async function loadGia() {
-      try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbzQ1loBs5fd9I4Pwo1IN-2u26nGSBSefkJFibPxzKVBktoTH9pM2MeCcK0F-0Lfebe_/exec');
-        const data = await response.json();
+    async function loadArticles() {
+      const response = await fetch("https://script.google.com/macros/s/AKfycbwZNzh79bRzqKlQBLg_QNx3gfHx2YTPLaHo6JAMCWf90wNKGQeB2yLrmYUxHXUt-PWtiw/exec");
+      const data = await response.json();
+      const container = document.querySelector(".container");
+      container.innerHTML = '';
 
-        // Cà phê
-        const cp = data.caphe;
-        let cpTable = `<b>Giá cà phê hôm nay ngày ${cp.ngay}</b><br>`;
-        cpTable += `
-          <table>
-            <tr>
-              <th>Khu vực</th>
-              <th>Giá</th>
-              <th>Thay đổi</th>
-            </tr>
-            <tr>
-              <td>Đắk Nông</td>
-              <td>${cp.gia.toLocaleString('vi-VN')}</td>
-              <td>${cp.thaydoi > 0 ? `➕ ${cp.thaydoi.toLocaleString('vi-VN')}` :
-                   cp.thaydoi < 0 ? `➖ ${Math.abs(cp.thaydoi).toLocaleString('vi-VN')}` : `Không đổi`}</td>
-            </tr>
-          </table>
+      data.forEach(article => {
+        const card = document.createElement("div");
+        card.className = "article-card";
+
+        card.innerHTML = `
+          <div class="article-image">
+            <img src="${article.image}" alt="Ảnh bài viết">
+          </div>
+          <div class="article-content">
+            <a class="article-title" href="${article.link}" target="_blank">${article.title}</a>
+            <p class="article-summary">${article.description.replace(/<[^>]+>/g, '').slice(0, 150)}...</p>
+          </div>
         `;
-        document.getElementById('giaCaPhe').innerHTML = cpTable;
 
-        // Tiêu
-        const tieu = data.tieu;
-        let tieuHTML = `<b>${tieu.tieuDe}</b><br><table><tr><th>Khu Vực</th><th>Giá Mua</th><th>Thay Đổi</th></tr>`;
-        tieu.data.forEach(item => {
-          let change = item.thayDoi > 0 ? `➕ ${item.thayDoi.toLocaleString('vi-VN')}` :
-                      item.thayDoi < 0 ? `➖ ${Math.abs(item.thayDoi).toLocaleString('vi-VN')}` : `Không đổi`;
-          tieuHTML += `<tr><td>${item.khuVuc}</td><td>${item.giaMua.toLocaleString('vi-VN')}</td><td>${change}</td></tr>`;
-        });
-        document.getElementById('giaTieu').innerHTML = tieuHTML;
-
-      } catch (error) {
-        document.getElementById('giaCaPhe').innerHTML = "🚫 Không lấy được giá.";
-        document.getElementById('giaTieu').innerHTML = "🚫 Không lấy được giá.";
-        console.error('Lỗi:', error);
-      }
+        container.appendChild(card);
+      });
     }
 
-    loadGia();
-    setInterval(loadGia, 300000); // Cập nhật mỗi 5 phút
+    loadArticles();
   </script>
 </body>
 </html>
