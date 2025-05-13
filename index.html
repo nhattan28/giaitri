@@ -69,11 +69,15 @@
       color: #2c3e50;
     }
 
-    .time {
-      font-size: 16px;
-      font-weight: bold;
-      color: #e67e22;
-    }
+.time {
+  font-size: 16px;
+  font-weight: bold;
+
+  display: inline-block;
+  width: auto;
+  height: auto;
+}
+
 
     @media screen and (max-width: 600px) {
       h1 {
@@ -111,11 +115,21 @@
   <h1>🌾 Cập Nhật Nông Sản & Thời Gian</h1>
   <!-- Lịch âm dương -->
   <div class="container">
-    <p><span class="label">⏰ Thời gian hiện tại:</span> <span id="clock" class="time">--:--:--</span></p>
-    <p><span class="label">📅 Thứ:</span> <span id="thu">Đang tải...</span>
-    <span class="label">📆 Ngày Dương:</span> <span id="ngayDuong">Đang tải...</span>
-    <span class="label">🗓 Ngày Âm Lịch:</span> <span id="ngayAmLich">Đang tải...</span></p>
-  </div>
+<table class="time-table">
+  <tr>
+    <td colspan="2">
+      ⏰ <span id="clock" class="time">--:--:--</span> – 📅 <span id="thu">Đang tải...</span>
+    </td>
+  </tr>
+  <tr>
+    <th>📆 Ngày Dương</th>
+    <th>🗓 Ngày Âm Lịch</th>
+  </tr>
+  <tr>
+    <td><span id="ngayDuong">Đang tải...</span></td>
+    <td><span id="ngayAmLich">Đang tải...</span></td>
+  </tr>
+</table>
   
   <!-- Giá cà phê -->
   <div class="section" id="caphe">
