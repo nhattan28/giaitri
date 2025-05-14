@@ -2,72 +2,43 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Camera Tự Động</title>
+  <title>Mở Camera</title>
   <style>
     body {
-      text-align: center;
-      font-family: Arial;
-      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      margin-top: 50px;
     }
     video {
-      width: 320px;
-      height: 240px;
-      border: 2px solid #333;
+      width: 100%;
+      max-width: auto;
+      border: 0px solid #444;
       border-radius: 10px;
     }
     button {
-      margin-top: 10px;
+      margin-top: 20px;
       padding: 10px 20px;
       font-size: 16px;
-      background: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #0056b3;
     }
   </style>
 </head>
 <body>
-
-  <h2>📷 Camera đang hoạt động</h2>
-  <video id="video" autoplay playsinline muted></video><br>
-  <button onclick="switchCamera()">🔄 Đổi Camera</button>
+  <h1></h1>
+  <video id="video" autoplay playsinline></video>
+  <button onclick="startCamera()">Bật Camera</button>
 
   <script>
-    let currentFacingMode = 'user'; // 'user' = trước, 'environment' = sau
-    let stream;
-
-    async function startCamera(facingMode) {
-      if (stream) {
-        stream.getTracks().forEach(track => track.stop());
-      }
-
+    async function startCamera() {
       try {
-        stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: { exact: facingMode } },
-          audio: false
-        });
-
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         const video = document.getElementById('video');
         video.srcObject = stream;
-      } catch (err) {
-        console.error("Không mở được camera:", err);
-        alert("⚠️ Không thể mở camera. Vui lòng cấp quyền sử dụng camera.");
+      } catch (error) {
+        alert('Không thể truy cập camera: ' + error.message);
       }
     }
-
-    function switchCamera() {
-      currentFacingMode = (currentFacingMode === 'user') ? 'environment' : 'user';
-      startCamera(currentFacingMode);
-    }
-
-    // Mở camera ngay khi trang load
-    window.addEventListener('DOMContentLoaded', () => {
-      startCamera(currentFacingMode);
-    });
   </script>
 </body>
 </html>
