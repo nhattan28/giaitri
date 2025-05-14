@@ -2,73 +2,70 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Nhận Diện Khuôn Mặt</title>
+  <title>Hiển thị 2 Camera</title>
   <style>
     body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       font-family: Arial, sans-serif;
-      text-align: center;
       margin-top: 20px;
     }
-    video, canvas {
+    .video-container {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    video {
+      width: 320px;
+      height: 240px;
       border: 2px solid #444;
       border-radius: 10px;
-      max-width: 100%;
     }
   </style>
 </head>
 <body>
-  <h2>🔍 Nhận Diện Khuôn Mặt Từ Camera</h2>
-  <video id="video" width="720" height="560" autoplay muted></video>
-  <canvas id="overlay" width="720" height="560"></canvas>
-
-  <!-- Thư viện face-api.js -->
-  <script defer src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
+  <h2>📷 Hiển thị 2 Camera Trên Cùng Một Màn Hình</h2>
+  <div class="video-container">
+    <div>
+      <p><strong>Camera 1</strong></p>
+      <video id="video1" autoplay playsinline muted></video>
+    </div>
+    <div>
+      <p><strong>Camera 2</strong></p>
+      <video id="video2" autoplay playsinline muted></video>
+    </div>
+  </div>
 
   <script>
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('overlay');
-    const displaySize = { width: video.width, height: video.height };
-
-    async function setupCamera() {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        video.srcObject = stream;
-      } catch (err) {
-        alert('Không thể truy cập camera: ' + err.message);
-      }
+    async function getCameras() {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      return devices.filter(device => device.kind === 'videoinput');
     }
 
-    async function loadModels() {
-      const MODEL_URL = 'https://cdn.jsdelivr.net/npm/face-api.js/models';
-      await Promise.all([
-        faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
-        faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
-        faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
-        faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
-      ]);
-    }
-
-    async function startFaceDetection() {
-      await loadModels();
-      await setupCamera();
-
-      video.addEventListener('play', () => {
-        faceapi.matchDimensions(canvas, displaySize);
-
-        setInterval(async () => {
-          const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
-            .withFaceLandmarks().withFaceExpressions();
-
-          const resizedDetections = faceapi.resizeResults(detections, displaySize);
-          canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
-          faceapi.draw.drawDetections(canvas, resizedDetections);
-          faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
-          faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
-        }, 200);
+    async function startCamera(deviceId, videoElementId) {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { deviceId: { exact: deviceId } }
       });
+      document.getElementById(videoElementId).srcObject = stream;
     }
 
-    startFaceDetection();
+    async function setupTwoCameras() {
+      const cameras = await getCameras();
+      if (cameras.length < 2) {
+        alert("Thiết bị của bạn không có đủ 2 camera.");
+        return;
+      }
+
+      // Camera đầu tiên
+      await startCamera(cameras[0].deviceId, 'video1');
+
+      // Camera thứ hai
+      await startCamera(cameras[1].deviceId, 'video2');
+    }
+
+    setupTwoCameras();
   </script>
 </body>
 </html>
