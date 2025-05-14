@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Giá Nông Sản & Lịch Âm Dương</title>
+  <title>Giá Nông Sản</title>
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
   <style>
     * {
@@ -115,7 +115,7 @@ padding: 5px 0 0 0; /* chỉ padding trên 10px */
   </style>
 </head>
 <body>
-  <h3>🌾 Cập Nhật Nông Sản 🌾</h3>
+  <h4>🌾 Cập Nhật Giá Nông Sản 🌾</h4>
   <!-- Lịch âm dương -->
   <div class="container">
 <table class="time-table">
@@ -168,7 +168,7 @@ padding: 5px 0 0 0; /* chỉ padding trên 10px */
 
         // Tiêu
         const tieu = data.tieu;
-        let tieuHTML = `<b>${tieu.tieuDe}</b><br><table><tr><th>Khu Vực</th><th>Giá Mua</th><th>Thay Đổi</th></tr>`;
+        let tieuHTML = `<b>${tieu.tieuDe}</b><br><table><tr><th>Khu Vực</th><th>Giá</th><th>Thay Đổi</th></tr>`;
         tieu.data.forEach(item => {
           let change = item.thayDoi > 0 ? `➕ ${item.thayDoi.toLocaleString('vi-VN')}` :
                       item.thayDoi < 0 ? `➖ ${Math.abs(item.thayDoi).toLocaleString('vi-VN')}` : `Không đổi`;
