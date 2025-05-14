@@ -2,20 +2,12 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Hiển thị 2 Camera</title>
+  <title>Chuyển Đổi Camera Trước/Sau</title>
   <style>
     body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       font-family: Arial, sans-serif;
-      margin-top: 20px;
-    }
-    .video-container {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
+      text-align: center;
+      padding: 20px;
     }
     video {
       width: 320px;
@@ -23,49 +15,59 @@
       border: 2px solid #444;
       border-radius: 10px;
     }
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
-  <h2>📷 Hiển thị 2 Camera Trên Cùng Một Màn Hình</h2>
-  <div class="video-container">
-    <div>
-      <p><strong>Camera 1</strong></p>
-      <video id="video1" autoplay playsinline muted></video>
-    </div>
-    <div>
-      <p><strong>Camera 2</strong></p>
-      <video id="video2" autoplay playsinline muted></video>
-    </div>
-  </div>
+
+  <h2>📷 Camera Trực Tiếp</h2>
+  <video id="video" autoplay playsinline muted></video>
+  <br>
+  <button onclick="switchCamera()">🔄 Đổi Camera</button>
 
   <script>
-    async function getCameras() {
-      const devices = await navigator.mediaDevices.enumerateDevices();
-      return devices.filter(device => device.kind === 'videoinput');
-    }
+    let currentFacingMode = 'user'; // 'user' = cam trước, 'environment' = cam sau
+    let stream;
 
-    async function startCamera(deviceId, videoElementId) {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { deviceId: { exact: deviceId } }
-      });
-      document.getElementById(videoElementId).srcObject = stream;
-    }
-
-    async function setupTwoCameras() {
-      const cameras = await getCameras();
-      if (cameras.length < 2) {
-        alert("Thiết bị của bạn không có đủ 2 camera.");
-        return;
+    async function startCamera(facingMode) {
+      if (stream) {
+        // Dừng stream cũ trước khi mở stream mới
+        stream.getTracks().forEach(track => track.stop());
       }
 
-      // Camera đầu tiên
-      await startCamera(cameras[0].deviceId, 'video1');
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { exact: facingMode } },
+          audio: false
+        });
 
-      // Camera thứ hai
-      await startCamera(cameras[1].deviceId, 'video2');
+        const video = document.getElementById('video');
+        video.srcObject = stream;
+      } catch (err) {
+        alert("Không thể mở camera: " + err.message);
+      }
     }
 
-    setupTwoCameras();
+    function switchCamera() {
+      currentFacingMode = currentFacingMode === 'user' ? 'environment' : 'user';
+      startCamera(currentFacingMode);
+    }
+
+    // Khởi động với camera trước
+    startCamera(currentFacingMode);
   </script>
+
 </body>
 </html>
